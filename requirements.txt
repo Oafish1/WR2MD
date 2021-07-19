@@ -91,7 +91,9 @@ rsa==4.7.2
 scikit-learn==0.24.2
     # via sklearn
 scipy==1.7.0
-    # via scikit-learn
+    # via
+    #   -r requirements.in
+    #   scikit-learn
 six==1.15.0
     # via
     #   absl-py
@@ -120,8 +122,12 @@ termcolor==1.1.0
     # via tensorflow
 threadpoolctl==2.2.0
     # via scikit-learn
+torch==1.9.0
+    # via -r requirements.in
 typing-extensions==3.7.4.3
-    # via tensorflow
+    # via
+    #   tensorflow
+    #   torch
 umap==0.1.1
     # via -r requirements.in
 unioncom==0.4.0

@@ -1,5 +1,7 @@
 matplotlib
+scipy
 sklearn
 tensorflow
+torch
 umap
 unioncom
