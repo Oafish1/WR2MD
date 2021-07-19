@@ -1,7 +1,10 @@
 matplotlib
+scikit-learn
 scipy
 sklearn
 tensorflow
 torch
+torchvision
 umap
+umap-learn
 unioncom
