@@ -113,7 +113,8 @@ ENV/
 .LSOverride
 
 # Data
-example/*.csv
+#examples/**/*.txt
+#examples/**/*.tsv
 
 # Lightning
 lightning_logs/

@@ -2,9 +2,11 @@
 
 ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/Oafish1/WR2MD/Build%20and%20Test?label=tests&style=plastic)
 
-This wrapper implements the following techniques for reconciling multi-modal data:
+This wrapper facilitates the use of the following techniques for reconciling multi-modal data:
 
 - MMD-MA
+- UnionCom
+- ManiNetCluster (7/12 Methods)
 
 
 # Notes

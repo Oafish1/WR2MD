@@ -77,6 +77,7 @@ def mmd_ma_helper(k1_matrix,
             #np.savetxt("alpha_hat_"+str(k)+"_"+str(i)+".txt", sess.run(alpha))
             #np.savetxt("beta_hat_"+str(k)+"_"+str(i)+".txt", sess.run(beta))
             history['iteration'].append(i)
+            # Maybe remove these logs?  Storage?
             history['alpha'].append(sess.run(alpha))
             history['beta'].append(sess.run(beta))
             # Change: Replaced
@@ -88,6 +89,8 @@ def mmd_ma_helper(k1_matrix,
             history['loss_distortion'].append(sess.run(distortion_part))
             #print i
             #print(sess.run(myFunction))
-    
+        
+        map_K1 = tf.matmul(K1,alpha).eval(session=sess)
+        map_K2 = tf.matmul(K2,beta).eval(session=sess)
     # Change: Added return
-    return history
+    return ([map_K1, map_K2], history)
