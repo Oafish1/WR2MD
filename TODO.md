@@ -21,7 +21,6 @@
 - Add text file output
 - Test verbosity method for thread-safety
 - Switch verbosity method to stream rather than temp file
-- Clean '_*.py' files from library
 
 ### Optimization
 - Lessen hard-coding in non-updated UnionCom
