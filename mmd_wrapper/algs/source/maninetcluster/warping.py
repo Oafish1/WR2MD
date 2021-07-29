@@ -2,6 +2,7 @@
 
 ''' Warping aligners '''
 import numpy as np
+# Change: Make work locally
 from .distance import SquaredL2
 from .dtw import dtw
 from .embedding import isomap

@@ -4,11 +4,15 @@
 
 This wrapper facilitates the use of the following techniques for reconciling multi-modal data:
 
+- MAGAN
+  - If MAGAN is interrupted, `tf.reset_default_graph()` may need to be used to avoid errors.
+- ManiNetCluster
 - MMD-MA
+  - MMD-MA currently only works without eager execution, meaning that programs requiring eager execution may require reimporting `tensorflow`.
 - UnionCom
-- ManiNetCluster (7/12 Methods)
 
 
 # Notes
 
+- If MAGAN is interrupted, `tf.reset_default_graph()` may need to be used to avoid errors.
 - MMD-MA currently only works without eager execution, meaning that programs requiring eager execution may require reimporting `tensorflow`.

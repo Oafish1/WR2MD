@@ -3,7 +3,7 @@
 ''' Alignment techniques '''
 import numpy as np
 import scipy as sp
-# Change:
+# Change: Make work locally
 from .neighborhood import laplacian
 from .util import block_antidiag
 

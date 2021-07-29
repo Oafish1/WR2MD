@@ -1,25 +1,17 @@
-# Upcoming
-  ### Ongoing
-  - Add more techniques
+# [1.2.0] - 2021-07-29
+  ### Added
+  - ManiNetCluster 5 remaining methods
+  - Increased optimization for automated correlation/weight creation for ManiNetCluster
+  - MAGAN
+  - `utilities` module for visualizations
 
-  ### Features
-  - Add startup details to `README.md`
-  - Add transformations/projections to output
-  - Add `pairs` to correlation class
-  - Add return documentation to `mmd_combine.py`
-  - Add tests to algorithms
-  - Add 3D plotting to examples
-  - Add verbosity to MMD-MA
-  - Convert MMD-MA to eager execution
-  - Add library features such as UnionCom's `Visualize` (?)
-  
-  ### QOL
-  - Add visualizations to library
-  - `README.md` badge displaying segmented checks
-  - Potentially switch main output method to `yield`
-  - Add text file output
-  - Test verbosity method for thread-safety
-  - Switch verbosity method to stream rather than temp file
+  ### Changed
+  - Code and specification standardization methods for MMD-MA
+  - Added new technique to `example.ipynb`
+
+  ### Fixed
+  - ManiNetCluster args for linear methods
+  - ManiNetCluster returns for linear methods
 
 # [1.1.0] - 2021-07-19
   ### Added
@@ -34,7 +26,7 @@
   - Documentation on main wrapper methods
   - More secure/reliable module pulling
   - Comparison of algorithms to `example.ipynb`
-  
+
   ### Changed
   - Output parameters have been standardized further
   - `example.ipynb`

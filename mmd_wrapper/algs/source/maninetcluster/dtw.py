@@ -1,9 +1,10 @@
 ''' adapted from https://github.com/all-umass/ManifoldWarping '''
 
 import numpy as np
-from correspondence import Correspondence
-from distance import SquaredL2
 from itertools import product
+# Change: Make work locally
+from .correspondence import Correspondence
+from .distance import SquaredL2
 
 
 def dtw(X, Y, metric=SquaredL2, debug=False):

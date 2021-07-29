@@ -10,10 +10,10 @@ def mmd_ma_helper(k1_matrix,
                   bandwidth=1.0,
                   training_rate=.00005,
                   k=0,
-                  # Change: Added max iterations
-                  max_iterations=10001,
                   # Change: Added variable stat recording timings
-                  rec_step=100
+                  rec_step=100,
+                  # Change: Added max iterations
+                  max_iterations=10001
                   ):
     """
     Performs MMD-MA
@@ -24,19 +24,23 @@ def mmd_ma_helper(k1_matrix,
         Any args to use while running the specified method
     **kwargs: kwargs
         Any parameters to use while running the specified method
-    max_iterations: int
-        Number of iterations to run
     rec_step: int
         How often to record statistics into the 'history' dictionary
+    max_iterations: int
+        Number of iterations to run
 
     Returns
     -------
-    History object with 'loss' (, _mmd, _penalty, _distortion), 
-    'alpha', 'beta', 'iteration' entries
+    (
+        [Mapped datasets],
+        Dictionary object with 'loss' (, _mmd, _penalty, _distortion), 
+        'alpha', 'beta', 'iteration' entries,
+        [Solved weights]
+    )
     """
     
     # Change: Compatibility
-    tf.compat.v1.disable_eager_execution()
+    tf.disable_eager_execution()
     #tf.compat.v1.enable_eager_execution()
     
     # Change: Add history dict for statistic storage
@@ -93,4 +97,4 @@ def mmd_ma_helper(k1_matrix,
         map_K1 = tf.matmul(K1,alpha).eval(session=sess)
         map_K2 = tf.matmul(K2,beta).eval(session=sess)
     # Change: Added return
-    return ([map_K1, map_K2], history)
+    return ([map_K1, map_K2], history, [alpha, beta])

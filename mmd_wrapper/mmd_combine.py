@@ -30,9 +30,10 @@ def mmd_combine(*datasets,
         Any number of np.arrays, each meant to represent data from one modality
     method: str
         Specification of which method to use
-    verbose: int
-        Specification of whether or not to output
-    updated: bool
+    verbose [UnionCom, MAGAN]: int
+        Specification of whether or not to output.  Only really makes sense
+        with labels
+    updated [UnionCom]: bool
         Whether or not to use the library version of the method, if available.
         This can result in less functionality
     **kwargs: kwargs
@@ -52,23 +53,27 @@ def mmd_combine(*datasets,
 
     elif query == 'mmd_ma':
         """
-        Returns ([mapped datasets], history)
+        Returns
+        -------
+        ([mapped datasets], history, [Solved weights])
 
-        `mmd_ma_helper.py`:
+        `mmd_ma_helper.py` - history:
         "...History object with 'loss' (, _mmd, _penalty, _distortion),
         'alpha', 'beta', 'iteration' entries"
         """
         assert len(datasets) == 2, 'MMD-MA only accepts two datasets'
 
         k1_matrix, k2_matrix = datasets
-        # asdf add mapping
+
         return mmd_ma_helper(*datasets, **kwargs)
 
     elif query == 'unioncom':
         """
-        Returns ([mapped datasets], history, UnionCom object)
+        Returns
+        -------
+        ([mapped datasets], history, UnionCom object)
 
-        `unioncom_helper.py`:
+        `unioncom_helper.py` - history:
         "History object with various entries returned depending on
         the parameters chosen
         tsne:
@@ -108,8 +113,26 @@ def mmd_combine(*datasets,
                                apply_transform(other),
         )
 
-        In the case of 'manifold warping', only returns ([mapped datasets], class)
+        For warping, 'nonlinear manifold aln', 'ctw...', only returns
+        ([mapped datasets], {'pairwise_error': float})
+
+        For nonlinear warps,
+        ([mapped datasets], {'pairwise_error': float, 'corr': np.array})
         """
         assert len(datasets) == 2, 'ManiNetCluster only accepts two datasets'
 
         return maninetcluster_helper(*datasets, **kwargs)
+
+    elif query == 'magan':
+        """
+        Returns
+        -------
+        ([mapped datasets], history, MAGAN object)
+
+        `magan_helper.py` - history:
+        "Dictionary object with 'loss_D', 'loss_G', 'iteration'"
+        """
+
+        assert len(datasets) == 2, 'MAGAN only accepts two datasets'
+
+        return magan_helper(*datasets, **kwargs, verbose=verbose)
