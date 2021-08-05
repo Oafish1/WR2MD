@@ -28,5 +28,5 @@
 
 
 # Data
-### Neural Data
-[Source](https://github.com/daifengwanglab/scMNC/tree/main/mouse_visual_cortex/data)
+### scMNC
+[Source](https://github.com/daifengwanglab/scMNC/)

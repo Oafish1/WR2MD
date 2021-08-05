@@ -1,3 +1,9 @@
+# [1.2.1] - 2021-08-05
+  ### Added
+  - MMD-MA auto kernel calculation feature
+  - scMNC sample data in `example.ipynb`
+  
+
 # [1.2.0] - 2021-07-29
   ### Added
   - ManiNetCluster 5 remaining methods

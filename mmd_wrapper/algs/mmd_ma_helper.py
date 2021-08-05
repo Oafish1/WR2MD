@@ -1,6 +1,9 @@
 from .source.mmd_ma import *
 import tensorflow.compat.v1 as tf
 
+# Change: Adding compatibility for raw data
+from scipy.spatial.distance import cdist
+
 # 'Change:' comments are changes for this wrapper
 def mmd_ma_helper(k1_matrix, 
                   k2_matrix,
@@ -13,7 +16,9 @@ def mmd_ma_helper(k1_matrix,
                   # Change: Added variable stat recording timings
                   rec_step=100,
                   # Change: Added max iterations
-                  max_iterations=10001
+                  max_iterations=10001,
+                  # Change: Added compatibility for raw data
+                  similarity_matrices=True
                   ):
     """
     Performs MMD-MA
@@ -28,6 +33,9 @@ def mmd_ma_helper(k1_matrix,
         How often to record statistics into the 'history' dictionary
     max_iterations: int
         Number of iterations to run
+    similarity_matrices: bool
+        If false, calculates similarity matrices on input to use
+        in the algorithm
 
     Returns
     -------
@@ -38,7 +46,16 @@ def mmd_ma_helper(k1_matrix,
         [Solved weights]
     )
     """
-    
+
+    # Change: Add compatibility for raw data
+    if not similarity_matrices:
+        #k1_matrix = cdist(k1_matrix, k1_matrix, metric='euclidean')
+        #k2_matrix = cdist(k2_matrix, k2_matrix, metric='euclidean')
+        k1_matrix = (k1_matrix - np.mean(k1_matrix, 0)) / np.std(k1_matrix, 0)
+        k1_matrix = np.matmul(k1_matrix, k1_matrix.T)
+        k2_matrix = (k2_matrix - np.mean(k2_matrix, 0)) / np.std(k2_matrix, 0)
+        k2_matrix = np.matmul(k2_matrix, k2_matrix.T)
+
     # Change: Compatibility
     tf.disable_eager_execution()
     #tf.compat.v1.enable_eager_execution()

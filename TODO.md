@@ -14,6 +14,7 @@
 - Add library features such as UnionCom's `Visualize` (?)
 
 ### QOL
+- Revise legend labels from `alignment_visualize`
 - Stop UnionCom from writing to file in notebook
 - Add visualizations to library
 - `README.md` badge displaying segmented checks
