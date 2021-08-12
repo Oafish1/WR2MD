@@ -2,6 +2,7 @@
 - Add more techniques
 
 ### Features
+- Integrate labels from scMNC data in visualization
 - Add 3D plotting to examples
 - Add consistent seeding
 - Add comparison to non-mmd data

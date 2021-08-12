@@ -1,3 +1,9 @@
+# [1.2.2] - 2021-08-11
+  ### Added
+  - `pairwise_error` function in `utilities` module
+  - Full scMNC motor data run in `example.ipynb`
+  - Enhanced error printout in `example.ipynb`
+
 # [1.2.1] - 2021-08-05
   ### Added
   - MMD-MA auto kernel calculation feature

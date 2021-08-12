@@ -1,6 +1,8 @@
 from typing import Optional, Union
 
 import matplotlib.pyplot as plt
+import numpy as np
+import scipy.spatial.distance as sd
 from sklearn.decomposition import PCA
 
 
@@ -87,3 +89,42 @@ def alignment_visualize(*mapping,
     plt.title(title)
 
     plt.legend(loc=legend_loc)
+
+
+def pairwise_error(map1,
+                   map2,
+                   metric=sd.euclidean,
+                   normalize_method=lambda m: m/m.max(),
+                   normalize_by_feature=False):
+    """
+    Calculate pairwise error between two maps of equal dimension
+
+    Parameters
+    ----------
+    map1, map2: array
+        Maps to compare
+    metric: function
+        Function array, array -> float that calculates the
+        distance/difference between two (potentially high)
+        dimensional points
+    normalize_method: function
+        Normalization method for use on the maps
+    normalize_by_feature: bool
+        If true, divides the final result by the number of features
+
+    Plots
+    -------
+    'hist['keys']' over 'hist['iter_key']'
+    """
+
+    # Set up function
+    if normalize_method is not None:
+        map1 = normalize_method(map1)
+        map2 = normalize_method(map2)
+
+    # Calculate pairwise error
+    diff = np.array([metric(row1, row2) for row1, row2 in zip(map1, map2)])
+    diff = diff.sum()
+    if normalize_by_feature:
+        diff = diff/map1.shape[1]
+    return diff
