@@ -1,14 +1,24 @@
+# [1.2.3] - 2021-08-25
+  ### Added
+  - `pairwise_boxplot` function in `utilities` module
+
+  ### Refactored
+  - `pairwise_error` function
+  - `_pairwise` helper function
+
+
 # [1.2.2] - 2021-08-11
   ### Added
   - `pairwise_error` function in `utilities` module
   - Full scMNC motor data run in `example.ipynb`
   - Enhanced error printout in `example.ipynb`
 
+
 # [1.2.1] - 2021-08-05
   ### Added
   - MMD-MA auto kernel calculation feature
   - scMNC sample data in `example.ipynb`
-  
+
 
 # [1.2.0] - 2021-07-29
   ### Added
@@ -24,6 +34,7 @@
   ### Fixed
   - ManiNetCluster args for linear methods
   - ManiNetCluster returns for linear methods
+
 
 # [1.1.0] - 2021-07-19
   ### Added
@@ -44,6 +55,7 @@
   - `example.ipynb`
     - Implements multiple techniques
     - Preview of alignment using PCA
+
 
 # [1.0.0] - 2021-07-12
   ### Added

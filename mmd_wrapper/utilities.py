@@ -32,7 +32,6 @@ def plot_training(hist,
     -------
     'hist['keys']' over 'hist['iter_key']'
     """
-
     for k in keys:
         plt.plot(hist[iter_key], hist[k], label=k)
 
@@ -53,7 +52,7 @@ def alignment_visualize(*mapping,
                         alg_name: Optional[str],
                         legend_loc: Union[str, int] = 'best'):
     """
-    Plots specified 'keys' from dictionary 'hist' over time
+    Plots mappings provided in a PCA visualization
 
     Parameters
     ----------
@@ -69,9 +68,8 @@ def alignment_visualize(*mapping,
 
     Plots
     -------
-    'hist['keys']' over 'hist['iter_key']'
+    PCA visualization of each point in the provided mappings
     """
-
     pca = PCA(n_components=2)
     pca.fit(mapping[0])
 
@@ -91,10 +89,15 @@ def alignment_visualize(*mapping,
     plt.legend(loc=legend_loc)
 
 
+def _default_normalize(*maps):
+    map_max = max(map.max() for map in maps)
+    return (map/map_max for map in maps)
+
+
 def pairwise_error(map1,
                    map2,
                    metric=sd.euclidean,
-                   normalize_method=lambda m: m/m.max(),
+                   normalize_method=_default_normalize,
                    normalize_by_feature=False):
     """
     Calculate pairwise error between two maps of equal dimension
@@ -105,7 +108,44 @@ def pairwise_error(map1,
         Maps to compare
     metric: function
         Function array, array -> float that calculates the
-        distance/difference between two (potentially high)
+        distance/difference between two (potentially) high
+        dimensional points
+    normalize_method: function
+        Normalization method for use on the maps
+    normalize_by_feature: bool
+        If true, divides the final result by the number of features
+
+    Returns
+    -------
+    Cumulative pairwise error
+    """
+    diff = _pairwise(map1,
+                     map2,
+                     metric=metric,
+                     normalize_method=normalize_method,
+                     normalize_by_feature=normalize_by_feature)
+    return diff.sum()
+
+
+def pairwise_boxplot(*maps,
+                     labels=None,
+                     metric=sd.euclidean,
+                     normalize_method=_default_normalize,
+                     normalize_by_feature=False):
+    """
+    Calculate pairwise error between two maps of equal dimension
+
+    Parameters
+    ----------
+    maps: arrays
+        Maps to compare.  Will be evaulated in pairs starting from
+        the first two
+    labels: array
+        Strings that contain the names of each map pair to compute.
+        Will be used for text display only
+    metric: function
+        Function array, array -> float that calculates the
+        distance/difference between two (potentially) high
         dimensional points
     normalize_method: function
         Normalization method for use on the maps
@@ -116,15 +156,49 @@ def pairwise_error(map1,
     -------
     'hist['keys']' over 'hist['iter_key']'
     """
+    assert len(maps) % 2 == 0, 'The number of maps provided must be even'
 
-    # Set up function
-    if normalize_method is not None:
-        map1 = normalize_method(map1)
-        map2 = normalize_method(map2)
+    errors = [_pairwise(*maps[i-2:i],
+                        metric=metric,
+                        normalize_method=normalize_method,
+                        normalize_by_feature=normalize_by_feature)
+              for i in range(2, len(maps)+1, 2)]
 
-    # Calculate pairwise error
+    plt.boxplot(errors)
+    plt.title('Pairwise Error')
+    ax = plt.gca()
+    if labels is not None:
+        ax.set_xticklabels(labels)
+
+
+def _pairwise(map1,
+              map2,
+              metric=sd.euclidean,
+              normalize_method=_default_normalize,
+              normalize_by_feature=False):
+    """
+    Small helper function for computing pairwise error
+
+    Parameters
+    ----------
+    map1, map2: array
+        Maps to compare.  Will be evaulated in pairs starting from
+        the first two
+    metric: function
+        Function array, array -> float that calculates the
+        distance/difference between two (potentially) high
+        dimensional points
+    normalize_method: function
+        Normalization method for use on the maps
+    normalize_by_feature: bool
+        If true, divides the final result by the number of features
+
+    Returns
+    -------
+    Pairwise error for each point
+    """
+    map1, map2 = normalize_method(map1, map2)
     diff = np.array([metric(row1, row2) for row1, row2 in zip(map1, map2)])
-    diff = diff.sum()
     if normalize_by_feature:
         diff = diff/map1.shape[1]
     return diff
