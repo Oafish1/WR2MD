@@ -94,11 +94,7 @@ def _default_normalize(*maps):
     return (map/map_max for map in maps)
 
 
-def pairwise_error(map1,
-                   map2,
-                   metric=sd.euclidean,
-                   normalize_method=_default_normalize,
-                   normalize_by_feature=False):
+def pairwise_error(map1, map2, **kwargs):
     """
     Calculate pairwise error between two maps of equal dimension
 
@@ -106,32 +102,21 @@ def pairwise_error(map1,
     ----------
     map1, map2: array
         Maps to compare
-    metric: function
-        Function array, array -> float that calculates the
-        distance/difference between two (potentially) high
-        dimensional points
-    normalize_method: function
-        Normalization method for use on the maps
-    normalize_by_feature: bool
-        If true, divides the final result by the number of features
+    kwargs: kwargs
+        Kwargs for `_pairwise`
 
     Returns
     -------
     Cumulative pairwise error
     """
-    diff = _pairwise(map1,
-                     map2,
-                     metric=metric,
-                     normalize_method=normalize_method,
-                     normalize_by_feature=normalize_by_feature)
-    return diff.sum()
+    return _pairwise(map1, map2, **kwargs).sum()
 
 
-def pairwise_boxplot(*maps,
-                     labels=None,
-                     metric=sd.euclidean,
-                     normalize_method=_default_normalize,
-                     normalize_by_feature=False):
+def boxplot(*maps,
+            boxplot_metric='pairwise',
+            title=None,
+            labels=None,
+            **kwargs):
     """
     Calculate pairwise error between two maps of equal dimension
 
@@ -140,17 +125,15 @@ def pairwise_boxplot(*maps,
     maps: arrays
         Maps to compare.  Will be evaulated in pairs starting from
         the first two
+    boxplot_metric: str
+        String representing the name of the error metric to use in the boxplot
+    title: str
+        If provided, overrides the default title for the plot
     labels: array
         Strings that contain the names of each map pair to compute.
         Will be used for text display only
-    metric: function
-        Function array, array -> float that calculates the
-        distance/difference between two (potentially) high
-        dimensional points
-    normalize_method: function
-        Normalization method for use on the maps
-    normalize_by_feature: bool
-        If true, divides the final result by the number of features
+    kwargs: kwargs
+        Kwargs for the given `boxplot_metric`
 
     Plots
     -------
@@ -158,14 +141,19 @@ def pairwise_boxplot(*maps,
     """
     assert len(maps) % 2 == 0, 'The number of maps provided must be even'
 
-    errors = [_pairwise(*maps[i-2:i],
-                        metric=metric,
-                        normalize_method=normalize_method,
-                        normalize_by_feature=normalize_by_feature)
-              for i in range(2, len(maps)+1, 2)]
+    if boxplot_metric == 'pairwise':
+        boxplot_metric = _pairwise
+        title = 'Pairwise Error' if title is None else title
+    elif boxplot_metric == 'relative_distance':
+        boxplot_metric = _distance
+        title = 'Relative Distance' if title is None else title
+    else:
+        raise ValueError(f'Value provided for `boxplot_metric` ({boxplot_metric}) not found')
 
+    errors = [boxplot_metric(*maps[i-2:i], **kwargs)
+              for i in range(2, len(maps)+1, 2)]
     plt.boxplot(errors)
-    plt.title('Pairwise Error')
+    plt.title(title)
     ax = plt.gca()
     if labels is not None:
         ax.set_xticklabels(labels)
@@ -173,7 +161,7 @@ def pairwise_boxplot(*maps,
 
 def _pairwise(map1,
               map2,
-              metric=sd.euclidean,
+              distance_metric=sd.euclidean,
               normalize_method=_default_normalize,
               normalize_by_feature=False):
     """
@@ -198,7 +186,45 @@ def _pairwise(map1,
     Pairwise error for each point
     """
     map1, map2 = normalize_method(map1, map2)
-    diff = np.array([metric(row1, row2) for row1, row2 in zip(map1, map2)])
+    diff = np.array([distance_metric(row1, row2) for row1, row2 in zip(map1, map2)])
     if normalize_by_feature:
         diff = diff/map1.shape[1]
     return diff
+
+
+def _distance(map1,
+              map2,
+              metric=sd.euclidean,
+              normalize_method=_default_normalize):
+    """
+    Helper function for calculating the classification distance between two maps
+
+    Parameters
+    ----------
+    map1, map2: array
+        Maps to compare.  Will be evaulated in pairs starting from
+        the first two
+    metric: function
+        Function array, array -> float that calculates the
+        distance/difference between two (potentially) high
+        dimensional points
+    normalize_method: function
+        Normalization method for use on the maps
+
+    Returns
+    -------
+    List of number of points between (closer than) each pair
+    """
+    map1, map2 = normalize_method(map1, map2)
+    diff = np.array([[metric(row1, row2) for row1 in map1] for row2 in map2])
+    dist1 = np.diag(diff).copy().reshape((1, -1))
+    diff1 = diff - dist1
+    diff1 = diff1 < 0
+    diff1 = diff1.sum(0)
+
+    dist2 = dist1.reshape((-1, 1))
+    diff2 = diff - dist2
+    diff2 = diff2 < 0
+    diff2 = diff2.sum(1)
+
+    return (diff1 + diff2) / 2

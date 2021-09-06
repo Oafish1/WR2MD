@@ -11,6 +11,31 @@ setup(
     description=readme,
     version=__version__,
     packages=find_packages(exclude=('tests')),
-    install_requires=[],
-	tests_require=['pytest']
+    install_requires=[
+        'matplotlib',
+        'scikit-learn',
+        'scipy',
+        'sklearn',
+        'tensorflow',
+        'torch',
+        'torchvision',
+        'umap',
+        'umap-learn',
+        'unioncom',
+    ],
+    extras_require={
+        'dev': [
+            'flake8',
+            'flake8-docstrings',
+            'flake8-import-order',
+            'pip-tools',
+            'pytest',
+            'pytest-cov',
+        ],
+        'notebooks': [
+            'jupyterlab',
+            'pandas',
+        ],
+    },
+	tests_require=['pytest'],
 )

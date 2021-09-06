@@ -4,6 +4,8 @@
 #
 #    pip-compile
 #
+--index-url https://pypi.python.org/simple/
+
 absl-py==0.13.0
     # via
     #   tensorboard
@@ -55,7 +57,7 @@ llvmlite==0.36.0
 markdown==3.3.4
     # via tensorboard
 matplotlib==3.4.2
-    # via -r requirements.in
+    # via mmd-wrapper (setup.py)
 numba==0.53.1
     # via
     #   pynndescent
@@ -107,13 +109,13 @@ rsa==4.7.2
     # via google-auth
 scikit-learn==0.24.2
     # via
-    #   -r requirements.in
+    #   mmd-wrapper (setup.py)
     #   pynndescent
     #   sklearn
     #   umap-learn
 scipy==1.7.0
     # via
-    #   -r requirements.in
+    #   mmd-wrapper (setup.py)
     #   pynndescent
     #   scikit-learn
     #   umap-learn
@@ -130,7 +132,7 @@ six==1.15.0
     #   python-dateutil
     #   tensorflow
 sklearn==0.0
-    # via -r requirements.in
+    # via mmd-wrapper (setup.py)
 tensorboard==2.5.0
     # via tensorflow
 tensorboard-data-server==0.6.1
@@ -138,7 +140,7 @@ tensorboard-data-server==0.6.1
 tensorboard-plugin-wit==1.8.0
     # via tensorboard
 tensorflow==2.5.0
-    # via -r requirements.in
+    # via mmd-wrapper (setup.py)
 tensorflow-estimator==2.5.0
     # via tensorflow
 termcolor==1.1.0
@@ -147,20 +149,20 @@ threadpoolctl==2.2.0
     # via scikit-learn
 torch==1.9.0
     # via
-    #   -r requirements.in
+    #   mmd-wrapper (setup.py)
     #   torchvision
 torchvision==0.10.0
-    # via -r requirements.in
+    # via mmd-wrapper (setup.py)
 typing-extensions==3.7.4.3
     # via
     #   tensorflow
     #   torch
 umap==0.1.1
-    # via -r requirements.in
+    # via mmd-wrapper (setup.py)
 umap-learn==0.5.1
-    # via -r requirements.in
+    # via mmd-wrapper (setup.py)
 unioncom==0.4.0
-    # via -r requirements.in
+    # via mmd-wrapper (setup.py)
 urllib3==1.26.6
     # via requests
 werkzeug==2.0.1

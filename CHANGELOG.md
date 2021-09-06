@@ -1,3 +1,16 @@
+# [1.2.4] - 2021-09-05
+  ### Added
+  - `Relative distance` metric.  For any pair, this metric is the average number of points closer than a point's partner
+
+  ### Changed
+  - Requirement formatting.  Now stored in `setup.py` rather than `requirements.in`
+  - Additional requirements `dev` and `notebooks`
+  - `boxplot` function replaces `pairwise_boxplot` and similarly specific functions
+
+  ### Fixed
+  - MAGAN output, formatting
+
+
 # [1.2.3] - 2021-08-25
   ### Added
   - `pairwise_boxplot` function in `utilities` module

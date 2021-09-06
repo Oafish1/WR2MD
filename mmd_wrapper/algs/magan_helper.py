@@ -138,8 +138,8 @@ def magan_helper(xb1,
                 plt.pause(1)
 
     # Change: Recording
-    Gb1 = magan.get_layer(xb1_, xb2_, 'Gb1')
-    Gb2 = magan.get_layer(xb1_, xb2_, 'Gb2')
+    Gb1 = magan.get_layer(xb1, xb2, 'Gb1')
+    Gb2 = magan.get_layer(xb1, xb2, 'Gb2')
 
     # Change: Reusability
     tf.reset_default_graph()
