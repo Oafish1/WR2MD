@@ -4,8 +4,6 @@
 #
 #    pip-compile requirements-dev.in
 #
---index-url https://pypi.python.org/simple/
-
 -e file:.
     # via -r requirements-dev.in
 absl-py==0.13.0
@@ -482,10 +480,6 @@ typing-extensions==3.7.4.3
     #   -c requirements.txt
     #   tensorflow
     #   torch
-umap==0.1.1
-    # via
-    #   -c requirements.txt
-    #   mmd-wrapper
 umap-learn==0.5.1
     # via
     #   -c requirements.txt

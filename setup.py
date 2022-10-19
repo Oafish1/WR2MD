@@ -19,7 +19,6 @@ setup(
         'tensorflow',
         'torch',
         'torchvision',
-        'umap',
         'umap-learn',
         'unioncom',
     ],

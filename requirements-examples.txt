@@ -4,8 +4,6 @@
 #
 #    pip-compile requirements-examples.in
 #
---index-url https://pypi.python.org/simple/
-
 numpy==1.19.5
     # via
     #   -c requirements.txt

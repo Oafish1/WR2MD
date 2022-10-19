@@ -4,8 +4,6 @@
 #
 #    pip-compile
 #
---index-url https://pypi.python.org/simple/
-
 absl-py==0.13.0
     # via
     #   tensorboard
@@ -157,8 +155,6 @@ typing-extensions==3.7.4.3
     # via
     #   tensorflow
     #   torch
-umap==0.1.1
-    # via mmd-wrapper (setup.py)
 umap-learn==0.5.1
     # via mmd-wrapper (setup.py)
 unioncom==0.4.0
