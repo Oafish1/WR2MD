@@ -15,7 +15,6 @@ setup(
         'matplotlib',
         'scikit-learn',
         'scipy',
-        'sklearn',
         'tensorflow',
         'torch',
         'torchvision',

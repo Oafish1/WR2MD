@@ -1,5 +1,6 @@
 # [1.2.5] - 2023-08-18
   ### Fixed
+  - Remove reference to `sklearn` package
   - Removed deprecated `np.int` usage in `Unioncom` implementation
 
 # [1.2.4] - 2021-09-05
