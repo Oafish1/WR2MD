@@ -48,16 +48,16 @@ class UnionCom(object):
     log_pd: log step of prime dual method
     manual_seed: random seed.
     delay: delay updata of alpha
-    kmax: largest number of neighbors in geodesic distance 
+    kmax: largest number of neighbors in geodesic distance
     output_dim: output dimension of integrated data.
-    distance_mode: mode of distance, 'geodesic' 
-                                        or distances in sklearn.metrics.pairwise.pairwise_distances, 
+    distance_mode: mode of distance, 'geodesic'
+                                        or distances in sklearn.metrics.pairwise.pairwise_distances,
                                         default is 'geodesic'.
     project_mode:　mode of project, ['tsne', 'barycentric'], default is tsne.
     -----------------------------
     Functions:
     -----------------------------
-    fit_transform(dataset)              find correspondence between datasets, 
+    fit_transform(dataset)              find correspondence between datasets,
                                         align multi-omics data in a common embedded space
     match(data)                         find correspondence between datasets
     Prime_Dual(Kx, Ky, dx, dy)             Prime dual algorithm to find the optimal match
@@ -117,9 +117,9 @@ class UnionCom(object):
         find correspondence between datasets & align multi-omics data in a common embedded space
         """
 
-        distance_modes =  ['euclidean', 'l2', 'l1', 'manhattan', 'cityblock', 'braycurtis', 'canberra', 
-            'chebyshev', 'correlation', 'cosine', 'dice', 'hamming', 'jaccard', 'kulsinski', 'mahalanobis', 
-            'matching', 'minkowski', 'rogerstanimoto', 'russellrao', 'seuclidean', 'sokalmichener', 'sokalsneath', 
+        distance_modes =  ['euclidean', 'l2', 'l1', 'manhattan', 'cityblock', 'braycurtis', 'canberra',
+            'chebyshev', 'correlation', 'cosine', 'dice', 'hamming', 'jaccard', 'kulsinski', 'mahalanobis',
+            'matching', 'minkowski', 'rogerstanimoto', 'russellrao', 'seuclidean', 'sokalmichener', 'sokalsneath',
             'sqeuclidean', 'yule', 'wminkowski', 'nan_euclidean', 'haversine']
 
         if self.integration_type not in ['BatchCorrect','MultiOmics']:
@@ -149,7 +149,7 @@ class UnionCom(object):
             else:
                 distances = pairwise_distances(dataset[i], metric=self.distance_mode)
                 self.dist.append(distances)
-            
+
 
             if self.integration_type == 'BatchCorrect':
                 if self.distance_mode not in distance_modes:
@@ -158,7 +158,7 @@ class UnionCom(object):
                     if self.col[i] != self.col[-1]:
                         raise Exception("BatchCorrect needs aligned features.")
                     cor_distances = pairwise_distances(dataset[i], dataset[-1], metric=self.distance_mode)
-                    self.cor_dist.append(cor_distances)     
+                    self.cor_dist.append(cor_distances)
 
         # find correspondence between samples
         pairs_x = []
@@ -185,7 +185,7 @@ class UnionCom(object):
             integrated_data = self.project_tsne(dataset, pairs_x, pairs_y, P_joint)
 
         elif self.project_mode == 'barycentric':
-            integrated_data = self.project_barycentric(dataset, match_result)	
+            integrated_data = self.project_barycentric(dataset, match_result)
 
         else:
             raise Exception("Choose correct project_mode: 'tsne or barycentric'")
@@ -204,7 +204,7 @@ class UnionCom(object):
 
         dataset_num = len(dataset)
         cor_pairs = []
-        N = np.int(np.max([len(l) for l in dataset]))
+        N = int(np.max([len(l) for l in dataset]))
         for i in range(dataset_num-1):
             print("---------------------------------")
             print("Find correspondence between Dataset {} and Dataset {}".format(i+1, \
@@ -227,7 +227,7 @@ class UnionCom(object):
         if self.integration_type == "MultiOmics":
             Kx = dist[0]
             Ky = dist[1]
-            N = np.int(np.maximum(len(Kx), len(Ky)))
+            N = int(np.maximum(len(Kx), len(Ky)))
             Kx = Kx / N
             Ky = Ky / N
             Kx = torch.from_numpy(Kx).float().to(self.device)
@@ -249,7 +249,7 @@ class UnionCom(object):
         Lambda = torch.zeros((n,1)).float().to(self.device)
         Mu = torch.zeros((m,1)).float().to(self.device)
         S = torch.zeros((n,1)).float().to(self.device)
-        
+
         pho1 = 0.9
         pho2 = 0.999
         delta = 10e-8
@@ -288,7 +288,7 @@ class UnionCom(object):
             F_tmp = F - grad
             F_tmp[F_tmp<0]=0
 
-            ### update 
+            ### update
             F = (1-self.epsilon)*F + self.epsilon*F_tmp
 
             ### update slack variable
@@ -331,7 +331,7 @@ class UnionCom(object):
     def project_tsne(self, dataset, pairs_x, pairs_y, P_joint):
         """
         tsne-based projection (nonlinear method) to match and preserve structures of different modalities.
-        Here we provide a way using neural network to find the embbeded space. 
+        Here we provide a way using neural network to find the embbeded space.
         However, traditional gradient descent method can also be used.
         """
         print("---------------------------------")
@@ -351,7 +351,7 @@ class UnionCom(object):
             dataset[i] = torch.from_numpy(dataset[i]).float().to(self.device)
 
         for epoch in range(self.epoch_DNN):
-            len_dataloader = np.int(np.max(self.row)/self.batch_size)
+            len_dataloader = int(np.max(self.row)/self.batch_size)
             if len_dataloader == 0:
                 len_dataloader = 1
                 self.batch_size = np.max(self.row)
@@ -367,10 +367,10 @@ class UnionCom(object):
                     low_dim_data = Project_DNN(data, i)
                     Q_joint = Q_tsne(low_dim_data)
 
-                    ## loss of structure preserving 
+                    ## loss of structure preserving
                     KL_loss.append(torch.sum(P_tmp * torch.log(P_tmp / Q_joint)))
 
-        		## loss of structure matching 
+        		## loss of structure matching
                 feature_loss = np.array(0)
                 feature_loss = torch.from_numpy(feature_loss).to(self.device).float()
                 for i in range(dataset_num-1):
