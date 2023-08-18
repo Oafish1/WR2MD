@@ -21,7 +21,7 @@ class unioncom_helper(UnionCom):
     All Methods:
         'corr_err', 'corr_iteration', 'iteration'
     """
-    
+
     def __init__(self, **kwargs):
         # Change: Logging
         self._history = {}
@@ -37,7 +37,7 @@ class unioncom_helper(UnionCom):
         if self.integration_type == "MultiOmics":
             Kx = dist[0]
             Ky = dist[1]
-            N = np.int(np.maximum(len(Kx), len(Ky)))
+            N = int(np.maximum(len(Kx), len(Ky)))
             Kx = Kx / N
             Ky = Ky / N
             Kx = torch.from_numpy(Kx).float().to(self.device)
@@ -59,7 +59,7 @@ class unioncom_helper(UnionCom):
         Lambda = torch.zeros((n,1)).float().to(self.device)
         Mu = torch.zeros((m,1)).float().to(self.device)
         S = torch.zeros((n,1)).float().to(self.device)
-        
+
         pho1 = 0.9
         pho2 = 0.999
         delta = 10e-8
@@ -98,7 +98,7 @@ class unioncom_helper(UnionCom):
             F_tmp = F - grad
             F_tmp[F_tmp<0]=0
 
-            ### update 
+            ### update
             F = (1-self.epsilon)*F + self.epsilon*F_tmp
 
             ### update slack variable
@@ -169,7 +169,7 @@ class unioncom_helper(UnionCom):
             dataset[i] = torch.from_numpy(dataset[i]).float().to(self.device)
 
         for epoch in range(self.epoch_DNN):
-            len_dataloader = np.int(np.max(self.row)/self.batch_size)
+            len_dataloader = int(np.max(self.row)/self.batch_size)
             if len_dataloader == 0:
                 len_dataloader = 1
                 self.batch_size = np.max(self.row)
@@ -185,10 +185,10 @@ class unioncom_helper(UnionCom):
                     low_dim_data = Project_DNN(data, i)
                     Q_joint = Q_tsne(low_dim_data)
 
-                    ## loss of structure preserving 
+                    ## loss of structure preserving
                     KL_loss.append(torch.sum(P_tmp * torch.log(P_tmp / Q_joint)))
 
-        		## loss of structure matching 
+        		## loss of structure matching
                 feature_loss = np.array(0)
                 feature_loss = torch.from_numpy(feature_loss).to(self.device).float()
                 for i in range(dataset_num-1):

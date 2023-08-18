@@ -1,3 +1,7 @@
+# [1.2.5] - 2023-08-18
+  ### Fixed
+  - Removed deprecated `np.int` usage in `Unioncom` implementation
+
 # [1.2.4] - 2021-09-05
   ### Added
   - `Relative distance` metric.  For any pair, this metric is the average number of points closer than a point's partner
